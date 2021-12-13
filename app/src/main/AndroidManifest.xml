@@ -13,6 +13,7 @@
         android:theme="@style/Theme.TestSnowflakeProxy">
 
         <activity
+            android:screenOrientation="portrait"
             android:name=".MainActivity"
             android:exported="true">
             <intent-filter>

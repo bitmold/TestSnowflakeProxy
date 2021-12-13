@@ -20,7 +20,7 @@
 
     <TextView
         android:id="@+id/label"
-        android:text="Connected peers: "
+        android:text="Connected Clients: 0"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"/>
 
