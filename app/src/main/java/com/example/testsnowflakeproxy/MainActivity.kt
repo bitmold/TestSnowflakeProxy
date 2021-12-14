@@ -33,16 +33,17 @@ class MainActivity : AppCompatActivity() {
         val broker = null
         val relay = null
         val stun = null
-        val logFile: String? = null
+        val natProbe = null
+        val logFile = null
         val keepLocalAddresses = false
         val unsafeLogging = true
 
         start.setOnClickListener {
-            IPtProxy.startSnowflakeProxy(capacity, broker, relay, stun, logFile, keepLocalAddresses, unsafeLogging) {
+            IPtProxy.startSnowflakeProxy(capacity, broker, relay, stun, natProbe, logFile, keepLocalAddresses, unsafeLogging) {
                 runOnUiThread {
                     count++
                     Toast.makeText(this, "Client connected", Toast.LENGTH_LONG).show()
-                    label.text = "Connected Clients: $count"
+                    label.text = "Connected Clients:$count"
                 }
             }
         }
