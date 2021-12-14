@@ -39,9 +39,11 @@ class MainActivity : AppCompatActivity() {
 
         start.setOnClickListener {
             IPtProxy.startSnowflakeProxy(capacity, broker, relay, stun, logFile, keepLocalAddresses, unsafeLogging) {
-                count++
-                Toast.makeText(this, "Client connected", Toast.LENGTH_LONG).show()
-                label.text = "Connected Clients: $count"
+                runOnUiThread {
+                    count++
+                    Toast.makeText(this, "Client connected", Toast.LENGTH_LONG).show()
+                    label.text = "Connected Clients: $count"
+                }
             }
         }
 
