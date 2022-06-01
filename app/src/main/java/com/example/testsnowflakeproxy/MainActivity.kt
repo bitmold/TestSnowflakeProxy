@@ -5,6 +5,7 @@ import android.os.Bundle
 import java.io.File
 
 import IPtProxy.IPtProxy;
+import android.util.Log
 import android.widget.Button
 import android.widget.TextView
 import android.widget.Toast
@@ -16,6 +17,8 @@ class MainActivity : AppCompatActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_main)
+
+        title = "App B"
 
         val stateLocation = File(cacheDir, "pt")
         if (!stateLocation.exists()) stateLocation.mkdir()
@@ -49,7 +52,29 @@ class MainActivity : AppCompatActivity() {
         }
 
         stop.setOnClickListener {
-            IPtProxy.stopSnowflakeProxy()
+            runOnUiThread {
+                IPtProxy.stopSnowflakeProxy()
+            }
+        }
+
+        val startObfs4 = findViewById<Button>(R.id.startObfs)
+        val stopObfs4 = findViewById<Button>(R.id.stopObfs)
+
+        startObfs4.setOnClickListener {
+            val obfs4Port = IPtProxy.startObfs4Proxy("DEBUG", false, false, null)
+            startObfs4.text = "obfs4 running on Port $obfs4Port"
+        }
+
+        stopObfs4.setOnClickListener {
+            IPtProxy.stopObfs4Proxy()
+        }
+
+        findViewById<Button>(R.id.logPorts).setOnClickListener {
+            Log.d("golog", "meek ${IPtProxy.meekPort()}")
+            Log.d("golog", "obfs2 ${IPtProxy.obfs2Port()}")
+            Log.d("golog", "obfs3 ${IPtProxy.obfs3Port()}")
+            Log.d("golog", "obfs4 ${IPtProxy.obfs4Port()}")
+            Log.d("golog", "scramblesuit ${IPtProxy.scramblesuitPort()}")
         }
     }
 }

@@ -7,14 +7,14 @@
     tools:context=".MainActivity">
 
     <Button
-        android:text="Start Proxy"
+        android:text="Start Snowflake Proxy"
         android:id="@+id/start"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"/>
 
     <Button
         android:id="@+id/stop"
-        android:text="Stop Proxy"
+        android:text="Stop Snowflake Proxy"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"/>
 
@@ -23,5 +23,22 @@
         android:text="Connected Clients: 0"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"/>
+
+    <Button
+        android:id="@+id/startObfs"
+        android:text="Start obfs4"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"/>
+    <Button
+        android:id="@+id/stopObfs"
+        android:text="Stop obfs4"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"/>
+
+    <Button
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="Log Ports"
+        android:id="@+id/logPorts"/>
 
 </LinearLayout>
