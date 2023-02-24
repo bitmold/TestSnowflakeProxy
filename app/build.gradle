@@ -37,7 +37,7 @@ dependencies {
     implementation 'androidx.appcompat:appcompat:1.4.0'
     implementation 'com.google.android.material:material:1.4.0'
 
-    implementation 'com.github.tladesignz:IPtProxy:1.6.0'
+    implementation 'com.github.tladesignz:IPtProxy:2.0.0'
 //    implementation files('libs/IPtProxy.aar')
 //
 }
