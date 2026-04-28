@@ -2,43 +2,46 @@
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
+    android:gravity="center"
     android:layout_height="match_parent"
-    android:orientation="vertical"
-    tools:context=".MainActivity">
+    android:layout_gravity="center"
+    tools:context="com.example.testsnowflakeproxy.MainActivity"
+    android:orientation="vertical">
 
     <Button
-        android:text="Start Snowflake Proxy"
         android:id="@+id/start"
         android:layout_width="wrap_content"
-        android:layout_height="wrap_content"/>
+        android:layout_height="wrap_content"
+        android:text="Start Snowflake Proxy" />
 
     <Button
         android:id="@+id/stop"
-        android:text="Stop Snowflake Proxy"
         android:layout_width="wrap_content"
-        android:layout_height="wrap_content"/>
+        android:layout_height="wrap_content"
+        android:text="Stop Snowflake Proxy" />
 
     <TextView
         android:id="@+id/label"
-        android:text="Connected Clients: 0"
         android:layout_width="wrap_content"
-        android:layout_height="wrap_content"/>
+        android:layout_height="wrap_content"
+        android:text="Connected Clients: 0" />
 
     <Button
         android:id="@+id/startObfs"
-        android:text="Start obfs4"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"/>
-    <Button
-        android:id="@+id/stopObfs"
-        android:text="Stop obfs4"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"/>
-
-    <Button
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:text="Log Ports"
-        android:id="@+id/logPorts"/>
+        android:text="Start obfs4" />
+
+    <Button
+        android:id="@+id/stopObfs"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="Stop obfs4" />
+
+    <Button
+        android:id="@+id/logPorts"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="Log Ports" />
 
 </LinearLayout>

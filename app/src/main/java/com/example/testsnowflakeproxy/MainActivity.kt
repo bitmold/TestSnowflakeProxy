@@ -1,19 +1,24 @@
 package com.example.testsnowflakeproxy
 
+import IPtProxy.Controller
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
 import java.io.File
 
-import IPtProxy.IPtProxy;
-import android.util.Log
+import IPtProxy.SnowflakeProxy
+import android.annotation.SuppressLint
 import android.widget.Button
 import android.widget.TextView
 import android.widget.Toast
+import com.example.testsnowflakeproxy5.R
 
 class MainActivity : AppCompatActivity() {
 
     private var count: Int = 0
 
+    private lateinit var snowflakeProxy: SnowflakeProxy
+
+    @SuppressLint("SetTextI18n")
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_main)
@@ -23,58 +28,79 @@ class MainActivity : AppCompatActivity() {
         val stateLocation = File(cacheDir, "pt")
         if (!stateLocation.exists()) stateLocation.mkdir()
 
-        IPtProxy.setStateLocation(stateLocation.absolutePath)
+        // save logs to the state dir
+        val enableLogging = true
 
-        // android activity config
-        val start = findViewById<Button>(R.id.start)
-        val stop = findViewById<Button>(R.id.stop)
+        // if true, disable the address scrubber
+        val unsafeLogging = false
+
+        val logLevel = "INFO"
+
+        // Set `ptDir` first, before accessing this the first time!
+        val controller: Controller by lazy {
+            Controller(
+                cacheDir.path,
+                enableLogging,
+                unsafeLogging,
+                logLevel,
+                object : IPtProxy.OnTransportEvents {
+                    override fun connected(name: String?) {}
+                    override fun error(name: String?, error: java.lang.Exception?) {}
+                    override fun stopped(name: String?, error: java.lang.Exception?) {}
+                })
+        }
         val label = findViewById<TextView>(R.id.label)
 
-        // snowflake proxy config
-        val capacity : Long = 0
-        // all String args are null to use defaults included in IPtProxy
-        val broker = null
-        val relay = null
-        val stun = null
-        val natProbe = null
-        val logFile = null
-        val keepLocalAddresses = false
-        val unsafeLogging = true
+        snowflakeProxy = SnowflakeProxy().apply {
+            capacity = 0L
+            brokerUrl = "https://snowflake-broker.torproject.net/"
+            relayUrl = "wss://snowflake.bamsoftware.com"
+            stunServer = "stun:stun.epygi.com:3478"
+            natProbeUrl = "https://snowflake-broker.torproject.net:8443/probe"
+            pollInterval = 120
+            clientEvents = object : IPtProxy.SnowflakeClientEvents {
+                override fun connected() {
+                    runOnUiThread {
+                        count++
+                        Toast.makeText(this@MainActivity, "Client connected", Toast.LENGTH_LONG)
+                            .show()
+                        label.text = "Connected Clients:$count"
+                    }
+                }
 
-        start.setOnClickListener {
-            IPtProxy.startSnowflakeProxy(capacity, broker, relay, stun, natProbe, logFile, keepLocalAddresses, unsafeLogging) {
-                runOnUiThread {
-                    count++
-                    Toast.makeText(this, "Client connected", Toast.LENGTH_LONG).show()
-                    label.text = "Connected Clients:$count"
+                override fun connectionFailed() {}
+                override fun disconnected(country: String?) {}
+                override fun natTypeUpdated(natType: String?) {}
+                override fun stats(
+                    connectionCount: Long,
+                    failedConnectionCount: Long,
+                    inboundBytes: Long,
+                    outboundBytes: Long,
+                    inboundUnit: String?,
+                    outboundUnit: String?,
+                    summaryInterval: Long
+                ) {
                 }
             }
         }
 
+
+        // android activity config
+        val start = findViewById<Button>(R.id.start)
+        val stop = findViewById<Button>(R.id.stop)
+
+        start.setOnClickListener {
+            snowflakeProxy.start()
+        }
+
         stop.setOnClickListener {
             runOnUiThread {
-                IPtProxy.stopSnowflakeProxy()
+                snowflakeProxy.stop()
             }
         }
 
-        val startObfs4 = findViewById<Button>(R.id.startObfs)
-        val stopObfs4 = findViewById<Button>(R.id.stopObfs)
+//        val startObfs4 = findViewById<Button>(R.id.startObfs)
+//        val stopObfs4 = findViewById<Button>(R.id.stopObfs)
 
-        startObfs4.setOnClickListener {
-            val obfs4Port = IPtProxy.startObfs4Proxy("DEBUG", false, false, null)
-            startObfs4.text = "obfs4 running on Port $obfs4Port"
-        }
-
-        stopObfs4.setOnClickListener {
-            IPtProxy.stopObfs4Proxy()
-        }
-
-        findViewById<Button>(R.id.logPorts).setOnClickListener {
-            Log.d("golog", "meek ${IPtProxy.meekPort()}")
-            Log.d("golog", "obfs2 ${IPtProxy.obfs2Port()}")
-            Log.d("golog", "obfs3 ${IPtProxy.obfs3Port()}")
-            Log.d("golog", "obfs4 ${IPtProxy.obfs4Port()}")
-            Log.d("golog", "scramblesuit ${IPtProxy.scramblesuitPort()}")
-        }
     }
 }
