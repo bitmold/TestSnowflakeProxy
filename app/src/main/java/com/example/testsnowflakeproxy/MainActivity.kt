@@ -7,6 +7,7 @@ import java.io.File
 
 import IPtProxy.SnowflakeProxy
 import android.annotation.SuppressLint
+import android.util.Log
 import android.widget.Button
 import android.widget.TextView
 import android.widget.Toast
@@ -68,9 +69,15 @@ class MainActivity : AppCompatActivity() {
                     }
                 }
 
-                override fun connectionFailed() {}
-                override fun disconnected(country: String?) {}
-                override fun natTypeUpdated(natType: String?) {}
+                override fun connectionFailed() {
+                    Log.wtf("bim", "connection failed")
+                }
+                override fun disconnected(country: String?) {
+                    Log.wtf("bim", "disconnected $country")
+                }
+                override fun natTypeUpdated(natType: String?) {
+                    Log.wtf("bim", "nat type updated $natType")
+                }
                 override fun stats(
                     connectionCount: Long,
                     failedConnectionCount: Long,
@@ -95,6 +102,7 @@ class MainActivity : AppCompatActivity() {
 
         stop.setOnClickListener {
             runOnUiThread {
+                Log.wtf("bim", "stop")
                 snowflakeProxy.stop()
             }
         }
